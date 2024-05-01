@@ -145,7 +145,7 @@ public class TodoControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(updatedTodo)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isNotFound();
     }
 
     @Test

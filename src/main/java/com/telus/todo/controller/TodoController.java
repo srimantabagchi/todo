@@ -41,13 +41,12 @@ public class TodoController {
             @PathVariable Long id,
             @RequestBody Todo updatedTodo) {
         return Mono.just(todoRepository.findById(id)
-                        .map(existingTodo -> {
-                            existingTodo.setDescription(updatedTodo.getDescription());
-                            existingTodo.setCompletionStatus(updatedTodo.isCompletionStatus());
-                            return todoRepository.save(existingTodo);
-                        })).map(todo -> ResponseEntity.ok().body(todo.orElse(null)))
-                .defaultIfEmpty(ResponseEntity.notFound().build())
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+                .map(existingTodo -> {
+                    existingTodo.setDescription(updatedTodo.getDescription());
+                    existingTodo.setCompletionStatus(updatedTodo.isCompletionStatus());
+                    return todoRepository.save(existingTodo);
+                }).map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build()));
     }
 
     @DeleteMapping("/{id}")
